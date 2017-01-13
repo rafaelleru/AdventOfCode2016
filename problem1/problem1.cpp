@@ -39,9 +39,14 @@ int taxicabGrometry(pair<int, int> finalPos){
 };
 
 pair<int, int> getFinalCoordinates(vector<step>& path){
+  /*
+    Para la segunda parte del problema almacenaremos cada coordenada en una lista de coordenadas (pair<int, int>) y
+    despues comprobaremos el primer elemento que haya repetido, esa será nuestra posicion final.
+  */
   int orientation = 0;
   pair<int, int> pos;
   pos.first = pos.second = 0;
+  vector<pair<int, int> > coordinatesHistory;
 
   for(vector<step>::iterator it = path.begin(); it != path.end(); ++it){
     if((*it).content[0] == 'R'){
@@ -64,30 +69,43 @@ pair<int, int> getFinalCoordinates(vector<step>& path){
       case 0: {
 	cout << "Norte" << endl;
 	pos.first++;
+	coordinatesHistory.push_back(pos);
 	break;
       }
 
       case 1: {
 	cout << "Este" << endl;
 	pos.second++;
+	coordinatesHistory.push_back(pos);
 	break;
       }
 
       case 2: {
 	cout << "Sur" << endl;
 	pos.first--;
+	coordinatesHistory.push_back(pos);
 	break;
       }
 
       case 3: {
 	cout << "Oeste" << endl;
 	pos.second--;
+	coordinatesHistory.push_back(pos);
 	break;
       }
       }
     }
   }
-
+  //Buscar los repetidos (version perra)
+  for(vector <pair<int, int> >::iterator it = coordinatesHistory.begin();
+      it != coordinatesHistory.end(); ++it){
+    for(vector <pair<int, int> >::iterator it2 = it+1; it2 != coordinatesHistory.end(); ++it2){
+      if((*it) == (*it2)){
+	cout << "I found a coordinate proviously visited" << endl;
+	return (*it);
+      }
+    }
+  }
   return pos;
 };
 
